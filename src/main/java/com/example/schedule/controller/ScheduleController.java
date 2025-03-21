@@ -36,4 +36,11 @@ public class ScheduleController {
         return scheduleService.findAllSchedule();
     }
 
+    @GetMapping("/date/{date}")
+    public ResponseEntity<ScheduleResponseDto> findScheduleByDate(@PathVariable LocalDate date){
+
+        return new ResponseEntity<>(scheduleService.findScheduleByDate(date),HttpStatus.OK);
+    }
+
+
 }
