@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Service
@@ -28,5 +29,10 @@ public class ScheduleServiceImpl implements ScheduleService{
         Schedule schedule = new Schedule(dto.getName(), dto.getPassword(), dto.getComments(), dto.getCalendarDate(), LocalDateTime.now(), null );
 
         return scheduleRepository.saveSchedule(schedule);
+    }
+
+    @Override
+    public List<ScheduleResponseDto> findAllSchedule() {
+        return scheduleRepository.findAllSchedule();
     }
 }
