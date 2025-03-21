@@ -4,7 +4,6 @@ package com.example.schedule.controller;
 import com.example.schedule.dto.FullInputDto;
 import com.example.schedule.dto.ScheduleRequestDto;
 import com.example.schedule.dto.ScheduleResponseDto;
-import com.example.schedule.entity.Schedule;
 import com.example.schedule.service.ScheduleService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +21,7 @@ public class ScheduleController {
         this.scheduleService = scheduleService;
     }
 
-    @PostMapping("/{date}")
+    @PostMapping("/date/{date}")
     public ResponseEntity<ScheduleResponseDto> createSchedule(@RequestBody ScheduleRequestDto dto, @PathVariable LocalDate date){
 
         FullInputDto fullInputDto = new FullInputDto(dto, date);

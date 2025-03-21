@@ -1,10 +1,10 @@
 package com.example.schedule.repository;
 
-import com.example.schedule.dto.ScheduleRequestDto;
+
 import com.example.schedule.dto.ScheduleResponseDto;
 import com.example.schedule.entity.Schedule;
-import com.example.schedule.service.ScheduleService;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
@@ -30,16 +30,16 @@ public class JdbdTemplateScheduleRepository implements ScheduleRepository {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("name", schedule.getName());
         parameters.put("comments", schedule.getComments());
-        parameters.put("calenderDate", schedule.getCalenderDate());
+        parameters.put("calendarDate", schedule.getCalendarDate());
         parameters.put("inputDateTime", schedule.getInputDateTime());
         parameters.put("password", schedule.getPassword());
 
-
+        Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
 
         return new ScheduleResponseDto(
                 schedule.getName(),
                 schedule.getComments(),
-                schedule.getCalenderDate(),
+                schedule.getCalendarDate(),
                 schedule.getInputDateTime(),
                 schedule.getUpdateDateTime()
         );

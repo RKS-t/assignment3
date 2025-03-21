@@ -1,6 +1,5 @@
 package com.example.schedule.dto;
 
-import com.example.schedule.entity.Schedule;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -13,14 +12,14 @@ public class FullInputDto {
     private String name;
     private String comments;
     private String password;
-    private LocalDate calenderDate;
+    private LocalDate calendarDate;
 
-    public  FullInputDto (ScheduleRequestDto dto, LocalDate calenderDate ){
+    public  FullInputDto (ScheduleRequestDto dto, LocalDate calendarDate){
 
         this.name = dto.getName();
         this.comments = dto.getComments();
         this.password = dto.getPassword();
-        this.calenderDate = calenderDate;
+        this.calendarDate = calendarDate;
 
     }
 

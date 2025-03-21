@@ -14,22 +14,22 @@ public class Schedule {
     private String name;
     private String password;
     private String comments;
-    private LocalDate calenderDate;
+    private LocalDate calendarDate;
     private LocalDateTime inputDateTime;
     private LocalDateTime updateDateTime;
 
 
-    public Schedule (String name, String password, String comments, LocalDate calenderDate){
+    public Schedule (String name, String password, String comments, LocalDate calendarDate){
         this.name=name;
         this.password = password;
         this.comments = comments;
-        this.calenderDate =calenderDate;
+        this.calendarDate = calendarDate;
     }
 
-    public Schedule (String name, String comments, LocalDate calenderDate, LocalDate inputDateTime, LocalDate updateDateTime){
+    public Schedule (String name, String comments, LocalDate calendarDate, LocalDateTime inputDateTime, LocalDateTime updateDateTime){
         this.name=name;
         this.comments = comments;
-        this.calenderDate =calenderDate;
+        this.calendarDate = calendarDate;
         this.inputDateTime = inputDateTime;
         this.updateDateTime = updateDateTime;
     }

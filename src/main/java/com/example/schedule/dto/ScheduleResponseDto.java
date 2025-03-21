@@ -13,14 +13,14 @@ public class ScheduleResponseDto {
 
     private String name;
     private String comments;
-    private LocalDate callenderDate;
+    private LocalDate calendarDate;
     private LocalDateTime inputDateTime;
     private LocalDateTime updateDateTime;
 
     public ScheduleResponseDto(Schedule schedule){
         this.name = schedule.getName();
         this.comments =schedule.getComments();
-        this.callenderDate = schedule.getCalenderDate();
+        this.calendarDate = schedule.getCalendarDate();
         this.inputDateTime = schedule.getInputDateTime();
         this.updateDateTime = schedule.getUpdateDateTime();
     }
