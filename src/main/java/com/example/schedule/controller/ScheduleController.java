@@ -37,9 +37,21 @@ public class ScheduleController {
     }
 
     @GetMapping("/date/{date}")
-    public ResponseEntity<ScheduleResponseDto> findScheduleByDate(@PathVariable LocalDate date){
+    public List<ScheduleResponseDto> findScheduleByDate(@PathVariable LocalDate date){
 
-        return new ResponseEntity<>(scheduleService.findScheduleByDate(date),HttpStatus.OK);
+        return scheduleService.findScheduleByDate(date);
+    }
+
+    @GetMapping("/user/{name}")
+    public List<ScheduleResponseDto> findScheduleByUser(@PathVariable String name){
+
+        return scheduleService.findScheduleByUser(name);
+    }
+
+    @GetMapping("/date/{date}/user/{name}")
+    public ResponseEntity<ScheduleResponseDto> findSchedule(@PathVariable LocalDate date, String name){
+
+        return new ResponseEntity<>(scheduleService.findSchedule(date, name), HttpStatus.OK);
     }
 
 

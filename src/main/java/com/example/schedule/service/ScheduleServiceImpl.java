@@ -41,12 +41,33 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
-    public ScheduleResponseDto findScheduleByDate(LocalDate date) {
+    public List<ScheduleResponseDto> findScheduleByDate(LocalDate date) {
+        List<ScheduleResponseDto> schedules = scheduleRepository.findScheduleByDate(date);
 
-        Optional<Schedule> optionalSchedule = scheduleRepository.findScheduleByDate(date);
+        if(schedules.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, date + "에 일정이 없습니다." );
+        }
+
+        return schedules;
+    }
+
+    @Override
+    public List<ScheduleResponseDto> findScheduleByUser(String name) {
+        List<ScheduleResponseDto> schedules = scheduleRepository.findScheduleByUser(name);
+
+        if(schedules.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, name + "의 일정이 없습니다." );
+        }
+
+        return schedules;
+    }
+
+    @Override
+    public ScheduleResponseDto findSchedule(LocalDate date, String name) {
+        Optional<Schedule> optionalSchedule = scheduleRepository.findSchedule(date, name);
 
         if(optionalSchedule.isEmpty()){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, date + "에 일정이 없습니다." );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, date + "에" + name + "의 일정이 없습니다." );
         }
 
         return new ScheduleResponseDto(optionalSchedule.get());

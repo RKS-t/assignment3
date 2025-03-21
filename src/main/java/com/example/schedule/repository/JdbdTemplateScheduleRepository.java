@@ -54,10 +54,20 @@ public class JdbdTemplateScheduleRepository implements ScheduleRepository {
 
     @Override
     public List<ScheduleResponseDto> findAllSchedule() {
-        return jdbcTemplate.query("select name, comments, calendarDate, inputDateTime, updateDateTime from schedule", scheduleRowMapper());
+        return jdbcTemplate.query("select name, comments, calendarDate, inputDateTime, updateDateTime from schedule", scheduleRowMappers());
     }
 
-    private RowMapper<ScheduleResponseDto> scheduleRowMapper() {
+    @Override
+    public List<ScheduleResponseDto> findScheduleByDate(LocalDate date) {
+        return jdbcTemplate.query("select name, comments, calendarDate, inputDateTime, updateDateTime from schedule where calendarDate = ?", scheduleRowMappers(), date);
+    }
+
+    @Override
+    public List<ScheduleResponseDto> findScheduleByUser(String name) {
+        return jdbcTemplate.query("select name, comments, calendarDate, inputDateTime, updateDateTime from schedule where name = ?", scheduleRowMappers(), name);
+    }
+
+    private RowMapper<ScheduleResponseDto> scheduleRowMappers() {
 
         return new RowMapper<ScheduleResponseDto>() {
             @Override
@@ -74,15 +84,16 @@ public class JdbdTemplateScheduleRepository implements ScheduleRepository {
 
     }
 
+
+
     @Override
-    public Optional<Schedule> findScheduleByDate(LocalDate date) {
-        List<Schedule> resultDate = jdbcTemplate.query("select name, comments, calendarDate, inputDateTime, updateDateTime from schedule where calendarDate = ?", scheduleRowMapperDate(), date);
+    public Optional<Schedule> findSchedule(LocalDate date, String name) {
+        List<Schedule> resultDate = jdbcTemplate.query("select name, comments, calendarDate, inputDateTime, updateDateTime from schedule where name = ? and calendarDate = ?", scheduleRowMapper(), date, name);
 
         return resultDate.stream().findAny();
-
     }
 
-    private RowMapper<Schedule> scheduleRowMapperDate() {
+    private RowMapper<Schedule> scheduleRowMapper() {
 
         return new RowMapper<Schedule>() {
             @Override
@@ -97,15 +108,5 @@ public class JdbdTemplateScheduleRepository implements ScheduleRepository {
             }
         };
 
-    }
-
-    @Override
-    public Optional<Schedule> findScheduleByUser(String name) {
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<Schedule> findSchudule(LocalDate date, String name) {
-        return Optional.empty();
     }
 }
