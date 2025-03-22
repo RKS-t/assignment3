@@ -2,6 +2,7 @@ package com.example.schedule.controller;
 
 
 import com.example.schedule.dto.FullInputDto;
+import com.example.schedule.dto.SchedulePatchRequestDto;
 import com.example.schedule.dto.ScheduleRequestDto;
 import com.example.schedule.dto.ScheduleResponseDto;
 import com.example.schedule.entity.Schedule;
@@ -49,10 +50,17 @@ public class ScheduleController {
     }
 
     @GetMapping("/date/{date}/user/{name}")
-    public ResponseEntity<ScheduleResponseDto> findSchedule(@PathVariable LocalDate date, String name){
+    public ResponseEntity<ScheduleResponseDto> findSchedule(@PathVariable LocalDate date, @PathVariable String name){
 
         return new ResponseEntity<>(scheduleService.findSchedule(date, name), HttpStatus.OK);
     }
 
+    @PatchMapping("/date/{date}/user/{name}")
+    public  ResponseEntity<ScheduleResponseDto> updateSchedule(
+            @RequestBody SchedulePatchRequestDto dto,
+            @PathVariable LocalDate date, @PathVariable String name
+    ){
+        return new ResponseEntity<>(scheduleService.updateSchedule(date, name, dto.getPassword() , dto.getComments()), HttpStatus.OK);
+    }
 
 }

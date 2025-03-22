@@ -1,6 +1,7 @@
 package com.example.schedule.service;
 
 import com.example.schedule.dto.FullInputDto;
+import com.example.schedule.dto.SchedulePatchRequestDto;
 import com.example.schedule.dto.ScheduleRequestDto;
 import com.example.schedule.dto.ScheduleResponseDto;
 import com.example.schedule.entity.Schedule;
@@ -16,4 +17,5 @@ public interface ScheduleService {
     List<ScheduleResponseDto> findScheduleByDate(LocalDate date);
     List<ScheduleResponseDto> findScheduleByUser(String name);
     ScheduleResponseDto findSchedule (LocalDate date, String name);
+    ScheduleResponseDto updateSchedule (LocalDate date, String name, String password, String comments);
 }

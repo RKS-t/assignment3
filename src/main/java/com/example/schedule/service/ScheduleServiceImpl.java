@@ -1,6 +1,7 @@
 package com.example.schedule.service;
 
 import com.example.schedule.dto.FullInputDto;
+import com.example.schedule.dto.SchedulePatchRequestDto;
 import com.example.schedule.dto.ScheduleRequestDto;
 import com.example.schedule.dto.ScheduleResponseDto;
 import com.example.schedule.entity.Schedule;
@@ -71,5 +72,31 @@ public class ScheduleServiceImpl implements ScheduleService{
         }
 
         return new ScheduleResponseDto(optionalSchedule.get());
+    }
+
+    @Override
+    public ScheduleResponseDto updateSchedule(LocalDate date, String name, String password, String contents) {
+
+        if(password == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비밀번호를 입력해 주세요");
+        }
+
+        Optional<Schedule> optionalPasswordSchedule = scheduleRepository.findScheduleByPassword(date, name, password);
+        Optional<Schedule> optionalSchedule = scheduleRepository.findSchedule(date, name);
+
+        if (optionalSchedule.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, date + "에" + name + "의 일정이 없습니다." );
+        } else if (optionalPasswordSchedule.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 틀립니다." );
+        }
+
+        int updatedRow = scheduleRepository.updateSchedule(date, name, contents, LocalDateTime.now());
+
+        if(updatedRow==1){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "변경된 사항이 없습니다.");
+        }
+
+
+        return new ScheduleResponseDto(optionalPasswordSchedule.get());
     }
 }

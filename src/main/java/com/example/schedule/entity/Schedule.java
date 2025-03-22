@@ -1,5 +1,6 @@
 package com.example.schedule.entity;
 
+import com.example.schedule.dto.SchedulePatchRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -31,6 +32,11 @@ public class Schedule {
         this.comments = comments;
         this.calendarDate = calendarDate;
         this.inputDateTime = inputDateTime;
+        this.updateDateTime = updateDateTime;
+    }
+
+    public void updateSchedule(SchedulePatchRequestDto dto, LocalDateTime updateDateTime){
+        this.comments = dto.getComments();
         this.updateDateTime = updateDateTime;
     }
 

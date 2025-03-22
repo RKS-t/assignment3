@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,20 +55,23 @@ public class JdbdTemplateScheduleRepository implements ScheduleRepository {
 
     @Override
     public List<ScheduleResponseDto> findAllSchedule() {
-        return jdbcTemplate.query("select name, comments, calendarDate, inputDateTime, updateDateTime from schedule", scheduleRowMappers());
+        return jdbcTemplate.query("select name, comments, calendarDate, inputDateTime, updateDateTime from schedule",
+                scheduleRowsMapper());
     }
 
     @Override
     public List<ScheduleResponseDto> findScheduleByDate(LocalDate date) {
-        return jdbcTemplate.query("select name, comments, calendarDate, inputDateTime, updateDateTime from schedule where calendarDate = ?", scheduleRowMappers(), date);
+        return jdbcTemplate.query("select name, comments, calendarDate, inputDateTime, updateDateTime from schedule where calendarDate = ?",
+                scheduleRowsMapper(), date);
     }
 
     @Override
     public List<ScheduleResponseDto> findScheduleByUser(String name) {
-        return jdbcTemplate.query("select name, comments, calendarDate, inputDateTime, updateDateTime from schedule where name = ?", scheduleRowMappers(), name);
+        return jdbcTemplate.query("select name, comments, calendarDate, inputDateTime, updateDateTime from schedule where name = ?",
+                scheduleRowsMapper(), name);
     }
 
-    private RowMapper<ScheduleResponseDto> scheduleRowMappers() {
+    private RowMapper<ScheduleResponseDto> scheduleRowsMapper() {
 
         return new RowMapper<ScheduleResponseDto>() {
             @Override
@@ -81,16 +85,24 @@ public class JdbdTemplateScheduleRepository implements ScheduleRepository {
                 );
             }
         };
-
     }
 
 
 
     @Override
     public Optional<Schedule> findSchedule(LocalDate date, String name) {
-        List<Schedule> resultDate = jdbcTemplate.query("select name, comments, calendarDate, inputDateTime, updateDateTime from schedule where name = ? and calendarDate = ?", scheduleRowMapper(), date, name);
+        List<Schedule> resultDate = jdbcTemplate.query("select name, comments, calendarDate, inputDateTime, updateDateTime from schedule where calendarDate = ? and name = ?",
+                scheduleRowMapper(), date, name);
 
         return resultDate.stream().findAny();
+    }
+
+    @Override
+    public Optional<Schedule> findScheduleByPassword(LocalDate date, String name, String password){
+        List<Schedule> resultData = jdbcTemplate.query("select name, comments, calendarDate, inputDateTime, updateDateTime from schedule where name = ? and password = ? and calendarDate = ?",
+                scheduleRowMapper(), name, password, date);
+
+        return  resultData.stream().findAny();
     }
 
     private RowMapper<Schedule> scheduleRowMapper() {
@@ -107,6 +119,10 @@ public class JdbdTemplateScheduleRepository implements ScheduleRepository {
                 );
             }
         };
+    }
 
+    public int updateSchedule(LocalDate date, String name, String comments, LocalDateTime updateDateTime){
+        return jdbcTemplate.update("update schedule set comments = ?, updateDateTime = ? where calendardate = ? and name = ?",
+                comments, updateDateTime, date, name);
     }
 }

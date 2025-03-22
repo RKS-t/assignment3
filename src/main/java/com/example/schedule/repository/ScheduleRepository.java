@@ -4,6 +4,7 @@ import com.example.schedule.dto.ScheduleResponseDto;
 import com.example.schedule.entity.Schedule;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,5 +14,7 @@ public interface ScheduleRepository {
     List<ScheduleResponseDto> findAllSchedule();
     List<ScheduleResponseDto> findScheduleByDate(LocalDate date);
     List<ScheduleResponseDto> findScheduleByUser(String name);
-    Optional<Schedule> findSchedule (LocalDate date, String name);
+    Optional<Schedule> findSchedule(LocalDate date, String name);
+    Optional<Schedule> findScheduleByPassword(LocalDate date, String name, String password);
+    int updateSchedule(LocalDate date, String name, String comments, LocalDateTime updateDateTime);
 }
