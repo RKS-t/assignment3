@@ -28,7 +28,7 @@ public class ScheduleServiceImpl implements ScheduleService{
     public ScheduleResponseDto saveSchedule(ScheduleRequestDto dto) {
 
 
-        Schedule schedule = new Schedule(dto.getName(), dto.getPassword(), dto.getComments(), dto.getCalendarDate(), LocalDateTime.now(), null );
+        Schedule schedule = new Schedule(dto.getName(), dto.getPassword(), dto.getComments(), dto.getDate(), LocalDateTime.now(), null );
 
         return scheduleRepository.saveSchedule(schedule);
     }
@@ -87,7 +87,13 @@ public class ScheduleServiceImpl implements ScheduleService{
 
         if(password == null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비밀번호를 입력해 주세요");
+        } else if (name == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이름을 입력해 주세요");
+        } else if (date == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "날짜를 입력해 주세요");
         }
+
+
 
         Optional<Schedule> optionalPasswordSchedule = scheduleRepository.findScheduleByPassword(id, password);
         Optional<Schedule> optionalSchedule = scheduleRepository.findScheduleById(id);

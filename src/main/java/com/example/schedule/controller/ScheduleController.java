@@ -52,7 +52,7 @@ public class ScheduleController {
     //날짜, 이름 이름 단건 조회
     @GetMapping("/post/{id}")
     public ResponseEntity<ScheduleResponseDto> findScheduleById(
-            @PathVariable LocalDate date, @PathVariable String name,@PathVariable Long id
+            @PathVariable Long id
     ){
         return new ResponseEntity<>(scheduleService.findScheduleById(id), HttpStatus.OK);
     }
@@ -62,7 +62,7 @@ public class ScheduleController {
             @RequestBody ScheduleRequestDto dto, @PathVariable Long id
     ){
         return new ResponseEntity<>(
-                scheduleService.updateSchedule(id, dto.getPassword(), dto.getCalendarDate(), dto.getName(), dto.getComments()), HttpStatus.OK
+                scheduleService.updateSchedule(id, dto.getPassword(), dto.getDate(), dto.getName(), dto.getComments()), HttpStatus.OK
         );
     }
     //단건 일정 삭제

@@ -12,17 +12,18 @@ public class ScheduleRequestDto {
     private String name;
     private String comments;
     private String password;
-    private LocalDate calendarDate;
+    private LocalDate date;
 
     public ScheduleRequestDto(SchedulePostRequestDto dto, LocalDate calendarDate){
 
         this.name = dto.getName();
         this.comments = dto.getComments();
         this.password = dto.getPassword();
-        this.calendarDate = calendarDate;
+        this.date = calendarDate;
 
     }
 
+    public ScheduleRequestDto(){}
 
 
 }

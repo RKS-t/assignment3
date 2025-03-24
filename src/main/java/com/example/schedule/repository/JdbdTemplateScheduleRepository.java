@@ -100,7 +100,7 @@ public class JdbdTemplateScheduleRepository implements ScheduleRepository {
     @Override
     public Optional<Schedule> findScheduleById(Long id) {
         List<Schedule> resultDate = jdbcTemplate.query(
-                "select name, comments, calendarDate, inputDateTime, updateDateTime " +
+                "select id, name, comments, calendarDate, inputDateTime, updateDateTime " +
                         "from schedule where id = ?",
                 scheduleRowMapper(), id);
 
@@ -110,7 +110,7 @@ public class JdbdTemplateScheduleRepository implements ScheduleRepository {
     @Override
     public Optional<Schedule> findScheduleByPassword(Long id, String password){
         List<Schedule> resultData = jdbcTemplate.query(
-                "select name, comments, calendarDate, inputDateTime, updateDateTime from schedule " +
+                "select id, name, comments, calendarDate, inputDateTime, updateDateTime from schedule " +
                     "where password = ? and id = ?",
                 scheduleRowMapper(), password, id);
 
