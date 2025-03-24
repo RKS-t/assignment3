@@ -1,7 +1,5 @@
 package com.example.schedule.service;
 
-import com.example.schedule.dto.FullInputDto;
-import com.example.schedule.dto.SchedulePatchRequestDto;
 import com.example.schedule.dto.ScheduleRequestDto;
 import com.example.schedule.dto.ScheduleResponseDto;
 import com.example.schedule.entity.Schedule;
@@ -12,7 +10,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,7 +25,7 @@ public class ScheduleServiceImpl implements ScheduleService{
 
 
     @Override
-    public ScheduleResponseDto saveSchedule(FullInputDto dto) {
+    public ScheduleResponseDto saveSchedule(ScheduleRequestDto dto) {
 
 
         Schedule schedule = new Schedule(dto.getName(), dto.getPassword(), dto.getComments(), dto.getCalendarDate(), LocalDateTime.now(), null );
@@ -75,33 +72,33 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
-    public ScheduleResponseDto findScheduleById(LocalDate date, String name, Long id) {
-        Optional<Schedule> optionalSchedule = scheduleRepository.findScheduleById(date, name, id);
+    public ScheduleResponseDto findScheduleById(Long id) {
+        Optional<Schedule> optionalSchedule = scheduleRepository.findScheduleById(id);
 
         if(optionalSchedule.isEmpty()){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, date + "에" + name + "의 일정이 없습니다." );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "일정이 없습니다." );
         }
 
         return new ScheduleResponseDto(optionalSchedule.get());
     }
 
     @Override
-    public ScheduleResponseDto updateSchedule(LocalDate date, String name, Long id, String password, String contents) {
+    public ScheduleResponseDto updateSchedule(Long id, String password, LocalDate date, String name, String contents) {
 
         if(password == null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비밀번호를 입력해 주세요");
         }
 
-        Optional<Schedule> optionalPasswordSchedule = scheduleRepository.findScheduleByPassword(date, name, id, password);
-        Optional<Schedule> optionalSchedule = scheduleRepository.findScheduleById(date, name, id);
+        Optional<Schedule> optionalPasswordSchedule = scheduleRepository.findScheduleByPassword(id, password);
+        Optional<Schedule> optionalSchedule = scheduleRepository.findScheduleById(id);
 
         if (optionalSchedule.isEmpty()){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, date + "에" + name + "의 일정이 없습니다." );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "일정이 없습니다." );
         } else if (optionalPasswordSchedule.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 틀립니다." );
         }
 
-        int updatedRow = scheduleRepository.updateSchedule(date, name, contents, LocalDateTime.now());
+        int updatedRow = scheduleRepository.updateSchedule(id, date, name, contents, LocalDateTime.now());
         System.out.println(updatedRow);
         if(updatedRow==0){
             System.out.println(updatedRow);
@@ -113,18 +110,18 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
-    public void deleteSchedule(LocalDate date, String name, Long id, String password) {
+    public void deleteSchedule(Long id, String password) {
 
-        Optional<Schedule> optionalPasswordSchedule = scheduleRepository.findScheduleByPassword(date, name, id, password);
-        Optional<Schedule> optionalSchedule = scheduleRepository.findScheduleById(date, name, id);
+        Optional<Schedule> optionalPasswordSchedule = scheduleRepository.findScheduleByPassword(id, password);
+        Optional<Schedule> optionalSchedule = scheduleRepository.findScheduleById(id);
 
         if (optionalSchedule.isEmpty()){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, date + "에" + name + "의 일정이 없습니다." );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "일정이 없습니다." );
         } else if (optionalPasswordSchedule.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 틀립니다." );
         }
 
-        scheduleRepository.deleteSchedule(date, name, id, password);
+        scheduleRepository.deleteSchedule(id, password);
 
     }
 

@@ -1,16 +1,13 @@
 package com.example.schedule.dto;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.time.LocalDate;
-
 @Getter
 @AllArgsConstructor
-public class SchedulePatchRequestDto {
+public class ScheduleDeleteRequestDto {
 
-    private String name;
     private String password;
-    private String comments;
 
 }

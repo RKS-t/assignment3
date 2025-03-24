@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ScheduleResponseDto {
 
+    private Long id;
     private String name;
     private String comments;
     private LocalDate calendarDate;
@@ -18,6 +19,7 @@ public class ScheduleResponseDto {
     private LocalDateTime updateDateTime;
 
     public ScheduleResponseDto(Schedule schedule){
+        this.id = schedule.getId();
         this.name = schedule.getName();
         this.comments =schedule.getComments();
         this.calendarDate = schedule.getCalendarDate();

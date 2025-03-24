@@ -10,8 +10,19 @@ import java.time.LocalDate;
 public class ScheduleRequestDto {
 
     private String name;
-    private String password;
     private String comments;
+    private String password;
+    private LocalDate calendarDate;
+
+    public ScheduleRequestDto(SchedulePostRequestDto dto, LocalDate calendarDate){
+
+        this.name = dto.getName();
+        this.comments = dto.getComments();
+        this.password = dto.getPassword();
+        this.calendarDate = calendarDate;
+
+    }
+
 
 
 }

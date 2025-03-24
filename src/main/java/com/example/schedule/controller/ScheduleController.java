@@ -21,11 +21,11 @@ public class ScheduleController {
     }
     //날짜에 따른 일정 업데이트
     @PostMapping("/date/{date}")
-    public ResponseEntity<ScheduleResponseDto> createSchedule(@RequestBody ScheduleRequestDto dto, @PathVariable LocalDate date){
+    public ResponseEntity<ScheduleResponseDto> createSchedule(@RequestBody SchedulePostRequestDto dto, @PathVariable LocalDate date){
 
-        FullInputDto fullInputDto = new FullInputDto(dto, date);
+        ScheduleRequestDto scheduleRequestDto = new ScheduleRequestDto(dto, date);
 
-        return new ResponseEntity<>(scheduleService.saveSchedule(fullInputDto), HttpStatus.CREATED);
+        return new ResponseEntity<>(scheduleService.saveSchedule(scheduleRequestDto), HttpStatus.CREATED);
     }
     //전체 일정 조회
     @GetMapping
@@ -50,28 +50,27 @@ public class ScheduleController {
         return scheduleService.findScheduleByDateUser(date, name);
     }
     //날짜, 이름 이름 단건 조회
-    @GetMapping("/date/{date}/user/{name}/post/{id}")
+    @GetMapping("/post/{id}")
     public ResponseEntity<ScheduleResponseDto> findScheduleById(
             @PathVariable LocalDate date, @PathVariable String name,@PathVariable Long id
     ){
-        return new ResponseEntity<>(scheduleService.findScheduleById(date, name, id), HttpStatus.OK);
+        return new ResponseEntity<>(scheduleService.findScheduleById(id), HttpStatus.OK);
     }
     //단건 일정 수정
-    @PatchMapping("/date/{date}/user/{name}/post/{id}")
+    @PatchMapping("/post/{id}")
     public  ResponseEntity<ScheduleResponseDto> updateSchedule(
-            @RequestBody SchedulePatchRequestDto dto,
-            @PathVariable LocalDate date, @PathVariable String name, @PathVariable Long id
+            @RequestBody ScheduleRequestDto dto, @PathVariable Long id
     ){
-        return new ResponseEntity<>(scheduleService.updateSchedule(date, name, id, dto.getPassword(), dto.getComments()), HttpStatus.OK);
+        return new ResponseEntity<>(
+                scheduleService.updateSchedule(id, dto.getPassword(), dto.getCalendarDate(), dto.getName(), dto.getComments()), HttpStatus.OK
+        );
     }
     //단건 일정 삭제
-    @DeleteMapping("/date/{date}/user/{name}/post/{id}")
+    @DeleteMapping("/post/{id}")
     public ResponseEntity<Void> deleteSchedule(
-            @RequestBody ScheduleDeleteRequestDto dto,
-            @PathVariable LocalDate date, @PathVariable String name, @PathVariable Long id){
-
-        scheduleService.deleteSchedule(date, name, id, dto.getPassword());
+            @RequestBody ScheduleDeleteRequestDto dto, @PathVariable Long id
+    ){
+        scheduleService.deleteSchedule(id, dto.getPassword());
         return new ResponseEntity<>(HttpStatus.OK);
-
     }
 }

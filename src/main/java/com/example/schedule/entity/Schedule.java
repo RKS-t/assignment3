@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Schedule {
 
-
+    private Long id;
     private String name;
     private String password;
     private String comments;
@@ -20,23 +20,20 @@ public class Schedule {
     private LocalDateTime updateDateTime;
 
 
-    public Schedule (String name, String password, String comments, LocalDate calendarDate){
+    public Schedule (Long id, String name, String password, String comments, LocalDate calendarDate){
+        this.id = id;
         this.name=name;
         this.password = password;
         this.comments = comments;
         this.calendarDate = calendarDate;
     }
 
-    public Schedule (String name, String comments, LocalDate calendarDate, LocalDateTime inputDateTime, LocalDateTime updateDateTime){
+    public Schedule (Long id, String name, String comments, LocalDate calendarDate, LocalDateTime inputDateTime, LocalDateTime updateDateTime){
+        this.id =id;
         this.name=name;
         this.comments = comments;
         this.calendarDate = calendarDate;
         this.inputDateTime = inputDateTime;
-        this.updateDateTime = updateDateTime;
-    }
-
-    public void updateSchedule(SchedulePatchRequestDto dto, LocalDateTime updateDateTime){
-        this.comments = dto.getComments();
         this.updateDateTime = updateDateTime;
     }
 
