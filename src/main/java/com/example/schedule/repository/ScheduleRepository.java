@@ -14,7 +14,9 @@ public interface ScheduleRepository {
     List<ScheduleResponseDto> findAllSchedule();
     List<ScheduleResponseDto> findScheduleByDate(LocalDate date);
     List<ScheduleResponseDto> findScheduleByUser(String name);
-    Optional<Schedule> findSchedule(LocalDate date, String name);
-    Optional<Schedule> findScheduleByPassword(LocalDate date, String name, String password);
+    List<ScheduleResponseDto> findScheduleByDateUser(LocalDate date, String name);
+    Optional<Schedule> findScheduleById(LocalDate date, String name, Long id);
+    Optional<Schedule> findScheduleByPassword(LocalDate date, String name, Long id, String password);
     int updateSchedule(LocalDate date, String name, String comments, LocalDateTime updateDateTime);
+    void deleteSchedule(LocalDate date, String name, Long id, String password);
 }
