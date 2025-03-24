@@ -1,6 +1,6 @@
 package com.example.schedule.entity;
 
-import com.example.schedule.dto.SchedulePatchRequestDto;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
