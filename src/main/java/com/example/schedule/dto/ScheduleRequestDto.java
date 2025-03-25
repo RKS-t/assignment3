@@ -23,7 +23,6 @@ public class ScheduleRequestDto {
 
     public ScheduleRequestDto(SchedulePostRequestDto dto, LocalDate calendarDate){
 
-
         this.name = dto.getName();
         this.comments = dto.getComments();
         this.password = dto.getPassword();
