@@ -85,24 +85,8 @@ public class ScheduleServiceImpl implements ScheduleService{
     @Override
     public ScheduleResponseDto updateSchedule(Long id, String password, LocalDate date, String name, String contents) {
 
-        if(password == null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비밀번호를 입력해 주세요");
-        } else if (name == null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이름을 입력해 주세요");
-        } else if (date == null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "날짜를 입력해 주세요");
-        }
 
-
-
-        Optional<Schedule> optionalPasswordSchedule = scheduleRepository.findScheduleByPassword(id, password);
-        Optional<Schedule> optionalSchedule = scheduleRepository.findScheduleById(id);
-
-        if (optionalSchedule.isEmpty()){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "일정이 없습니다." );
-        } else if (optionalPasswordSchedule.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 틀립니다." );
-        }
+        passwordValidate(id, password);
 
         int updatedRow = scheduleRepository.updateSchedule(id, date, name, contents, LocalDateTime.now());
         System.out.println(updatedRow);
@@ -111,24 +95,30 @@ public class ScheduleServiceImpl implements ScheduleService{
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "변경된 사항이 없습니다.");
         }
 
+        Optional<Schedule> optionalUpDateSchedule = scheduleRepository.findScheduleById(id);
 
-        return new ScheduleResponseDto(optionalPasswordSchedule.get());
+        return new ScheduleResponseDto(optionalUpDateSchedule.get());
     }
 
     @Override
     public void deleteSchedule(Long id, String password) {
 
-        Optional<Schedule> optionalPasswordSchedule = scheduleRepository.findScheduleByPassword(id, password);
+
+        passwordValidate(id, password);
+
+        scheduleRepository.deleteSchedule(id, password);
+
+    }
+
+    @Override
+    public void passwordValidate(Long id, String password) {
         Optional<Schedule> optionalSchedule = scheduleRepository.findScheduleById(id);
 
         if (optionalSchedule.isEmpty()){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "일정이 없습니다." );
-        } else if (optionalPasswordSchedule.isEmpty()) {
+        } else if (!optionalSchedule.get().getPassword().equals(password)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 틀립니다." );
         }
-
-        scheduleRepository.deleteSchedule(id, password);
-
     }
 
 

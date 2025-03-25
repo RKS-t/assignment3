@@ -19,14 +19,6 @@ public class Schedule {
     private LocalDateTime inputDateTime;
     private LocalDateTime updateDateTime;
 
-    public Schedule (Long id, String name, String comments, LocalDate calendarDate, LocalDateTime inputDateTime, LocalDateTime updateDateTime){
-        this.id =id;
-        this.name=name;
-        this.comments = comments;
-        this.calendarDate = calendarDate;
-        this.inputDateTime = inputDateTime;
-        this.updateDateTime = updateDateTime;
-    }
 
     public Schedule (String name, String password, String comments, LocalDate calendarDate, LocalDateTime inputDateTime, LocalDateTime updateDateTime){
         this.name=name;

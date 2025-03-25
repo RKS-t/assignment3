@@ -16,4 +16,5 @@ public interface ScheduleService {
     ScheduleResponseDto findScheduleById(Long id);
     ScheduleResponseDto updateSchedule (Long id, String password, LocalDate date, String name, String comments);
     void deleteSchedule (Long id, String password);
+    void passwordValidate (Long id, String password);
 }
