@@ -29,6 +29,7 @@ public class JdbdTemplateScheduleRepository implements ScheduleRepository {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+    //저장 레파지토리 매서드
     @Override
     public ScheduleResponseDto saveSchedule(Schedule schedule) {
 
@@ -54,18 +55,21 @@ public class JdbdTemplateScheduleRepository implements ScheduleRepository {
         );
     }
 
+    //전체 조회
     @Override
     public List<ScheduleResponseDto> findAllSchedule() {
         return jdbcTemplate.query("select id, name, comments, calendarDate, inputDateTime, updateDateTime from schedule order by calendarDate, updateDateTime desc",
                 scheduleRowsMapper());
     }
 
+    //날짜별 조회
     @Override
     public List<ScheduleResponseDto> findScheduleByDate(LocalDate date) {
         return jdbcTemplate.query("select id, name, comments, calendarDate, inputDateTime, updateDateTime from schedule where calendarDate = ?order by updateDateTime desc",
                 scheduleRowsMapper(), date);
     }
 
+    //이름별 조회
     @Override
     public List<ScheduleResponseDto> findScheduleByUser(String name) {
         return jdbcTemplate.query("select id, name, comments, calendarDate, inputDateTime, updateDateTime " +
@@ -73,6 +77,7 @@ public class JdbdTemplateScheduleRepository implements ScheduleRepository {
                 scheduleRowsMapper(), name);
     }
 
+    //날짜별, 이름별 조회
     @Override
     public List<ScheduleResponseDto> findScheduleByDateUser(LocalDate date, String name) {
         return jdbcTemplate.query("select id, name, comments, calendarDate, inputDateTime, updateDateTime " +
@@ -80,6 +85,7 @@ public class JdbdTemplateScheduleRepository implements ScheduleRepository {
                 scheduleRowsMapper(), name, date);
     }
 
+    //다건 매핑 함수
     private RowMapper<ScheduleResponseDto> scheduleRowsMapper() {
 
         return new RowMapper<ScheduleResponseDto>() {
@@ -98,7 +104,7 @@ public class JdbdTemplateScheduleRepository implements ScheduleRepository {
     }
 
 
-
+    //이름 단건 조회
     @Override
     public Optional<Schedule> findScheduleById(Long id) {
         List<Schedule> resultDate = jdbcTemplate.query(
@@ -109,7 +115,7 @@ public class JdbdTemplateScheduleRepository implements ScheduleRepository {
         return resultDate.stream().findAny();
     }
 
-
+    //단건 매핑 함수
     private RowMapper<Schedule> scheduleRowMapper() {
 
         return new RowMapper<Schedule>() {
@@ -128,6 +134,7 @@ public class JdbdTemplateScheduleRepository implements ScheduleRepository {
         };
     }
 
+    //단건 수정 함수
     public int updateSchedule(Long id, LocalDate date, String name, String comments, LocalDateTime updateDateTime){
         return jdbcTemplate.update(
                 "update schedule set calendardate = ?, name = ?, comments = ?, updateDateTime = ?" +
@@ -135,6 +142,7 @@ public class JdbdTemplateScheduleRepository implements ScheduleRepository {
                 date, name, comments, updateDateTime, date, name, comments, id);
     }
 
+    //단건 삭제 함수
     @Override
     public void deleteSchedule(Long id, String password) {
         jdbcTemplate.update("delete FROM schedule where id = ? and password = ?",

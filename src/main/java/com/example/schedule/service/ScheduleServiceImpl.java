@@ -17,13 +17,15 @@ import java.util.Optional;
 @Service
 public class ScheduleServiceImpl implements ScheduleService{
 
+
     private final ScheduleRepository scheduleRepository;
+
 
     public ScheduleServiceImpl(ScheduleRepository scheduleRepository) {
         this.scheduleRepository = scheduleRepository;
     }
 
-
+    //저장 서비스
     @Override
     public ScheduleResponseDto saveSchedule(ScheduleRequestDto dto) {
 
@@ -33,11 +35,13 @@ public class ScheduleServiceImpl implements ScheduleService{
         return scheduleRepository.saveSchedule(schedule);
     }
 
+    //전체 조회
     @Override
     public List<ScheduleResponseDto> findAllSchedule() {
         return scheduleRepository.findAllSchedule();
     }
 
+    //날짜별 조회
     @Override
     public List<ScheduleResponseDto> findScheduleByDate(LocalDate date) {
         List<ScheduleResponseDto> schedules = scheduleRepository.findScheduleByDate(date);
@@ -49,6 +53,7 @@ public class ScheduleServiceImpl implements ScheduleService{
         return schedules;
     }
 
+    //이름별 조회
     @Override
     public List<ScheduleResponseDto> findScheduleByUser(String name) {
         List<ScheduleResponseDto> schedules = scheduleRepository.findScheduleByUser(name);
@@ -60,6 +65,7 @@ public class ScheduleServiceImpl implements ScheduleService{
         return schedules;
     }
 
+    //날짜, 이름별 조회
     @Override
     public List<ScheduleResponseDto> findScheduleByDateUser(LocalDate date, String name) {
         List<ScheduleResponseDto> schedules = scheduleRepository.findScheduleByDateUser(date, name);
@@ -71,6 +77,7 @@ public class ScheduleServiceImpl implements ScheduleService{
         return schedules;
     }
 
+    //단건 조회
     @Override
     public ScheduleResponseDto findScheduleById(Long id) {
         Optional<Schedule> optionalSchedule = scheduleRepository.findScheduleById(id);
@@ -82,6 +89,7 @@ public class ScheduleServiceImpl implements ScheduleService{
         return new ScheduleResponseDto(optionalSchedule.get());
     }
 
+    //단건 수정
     @Override
     public ScheduleResponseDto updateSchedule(Long id, String password, LocalDate date, String name, String contents) {
 
@@ -100,6 +108,7 @@ public class ScheduleServiceImpl implements ScheduleService{
         return new ScheduleResponseDto(optionalUpDateSchedule.get());
     }
 
+    //단건 삭제
     @Override
     public void deleteSchedule(Long id, String password) {
 
@@ -110,6 +119,7 @@ public class ScheduleServiceImpl implements ScheduleService{
 
     }
 
+    //비밀번호 검증 함수
     @Override
     public void passwordValidate(Long id, String password) {
         Optional<Schedule> optionalSchedule = scheduleRepository.findScheduleById(id);

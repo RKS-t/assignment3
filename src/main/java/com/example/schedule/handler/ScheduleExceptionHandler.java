@@ -15,21 +15,23 @@ import java.time.format.DateTimeParseException;
 @ControllerAdvice
 public class ScheduleExceptionHandler {
 
+
+    //valid 예외처리 메세지
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<String> handleConstraintViolationException(ConstraintViolationException ex) {
         return new ResponseEntity<>("@Validated failed: " + ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
-
+    //valid 예외처리시 위반사항 모두 출력
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<String> handleValidationException(MethodArgumentNotValidException ex) {
         return new ResponseEntity<>("@Valid failed: " + ex.getBindingResult().getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);
     }
-
+    //제이슨 입력 잘못되었을시 (날짜타입) 오류 메세지
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<String> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
         return new ResponseEntity<>("An error occurred: " + "올바른 날짜를 입력해 주세요", HttpStatus.BAD_REQUEST);
     }
-
+    //경로 날짜 변수 잘못 입력시 오류 메세지
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<String> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex) {
         return new ResponseEntity<>("An error occurred: " + "올바른 주소를 입력해 주세요", HttpStatus.BAD_REQUEST);
