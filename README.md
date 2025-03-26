@@ -71,7 +71,8 @@ Communication
 |  일정 수정          | PATCH  | api/schedule/post/{id}               | 요청 body<br>{<br>”name” : “이름”,<br>”date” : “일정 날짜”<br>”password” : “비밀번호”,<br>”contents” :  “일정 내용”<br>}<br>요청 pathvaluable<br>{id} in /post/{id} | 수정 정보<br>{<br>”id” = “식별번호”<br>”name” : “이름”,<br>”contents” :  “일정 내용”,<br>”calendarDate” : “ 일정 날짜”,<br>”inputDateTime”: “등록 날짜”,<br>”updateDateTime” : “수정 날짜”<br>}       | 200: OK      |
 | 선택한 일정 삭제       | DELETE | api/schedule/post/{id}               | 요청 pathvaluable<br> {id} in /post/{id}                                                                                                            | -                                                                                                                                                                           | 200: OK      |
 
-  <a href= " {https://www.notion.so/1bd1384f860280cbbf41de3e9907f77d?v=1bd1384f860280a08e2a000c57ec49f3 } "> api 명세서 링크 바로가기</a>
+  
+  [api 명세서 링크 바로가기](https://www.notion.so/1bd1384f860280cbbf41de3e9907f77d?v=1bd1384f860280a08e2a000c57ec49f3)
 
 ---
 ### ERD
