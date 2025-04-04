@@ -2,11 +2,11 @@
 
 ### 프로젝트 소개
 
-* 달력에 일정을 메모하는 스프링 백엔드 프로젝트
+* 일정을 작성하는 기능을 구현하는 스프링 백엔드 프로젝트
 
-* 스프링에 대한 기본적인 사용법과 이해 목표
+* 회원가입, 로그인 기능을 통해 세션과 필터 기능 연습 목표
 
-  
+* 스프링 JPA에 대한 기본적인 사용법과 이해 목표
 
 
 ---
@@ -38,110 +38,135 @@ Communication
 
 ### 주요 기능
 
-* 날짜에 따른 일정을 입력 
+* 회원가입, 로그인, 로그아웃 기능
 
-* 날짜별, 이름별 이름 조회 기능 
+* 회원, 일정 댓글 CRUD 기능
       
-* 단건 일정 조회 및 수정 기능
-
-* 일정 삭제 기능
 
 ---
 ### 이 코드의 특징
 
-* 발제에는 일정 날짜가 따로 없지만 이를 추가하여 일정표 뷰에 맞는 코드 제작
+* 필터를 통한 상황별 uri 통제
 
-* 달력 뷰에 맞는 POST 입력 방식 (경로변수로 입력받음)
+* 예외 핸들러를 통한 각종 예외 상황 통제
 
-* Valid와 일정 핸들러 클래스르를 이용한 예외 처리
+* 패스워드 인코더를 이용하여 비밀번호를 암호화하여 DB에 저장
 
-* 다건 정보 조회시 일정날짜 순, 최신 수정순으로 일정 정보 반환
+* 세션을 이용한 안전한 로그인 기능 제공
+
+* 멤버 인가 함수를 통한 작성자 구별
 
 ---
 ### API 명세서 
 
-| 기능              | Method | URL                                  | request                                                                                                                                           | response                                                                                                                                                                    | 상태코드         |
-|-----------------|--------|--------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------|
-| 일정 생성           | POST   | api/schedule/date/{date}             | 요청 body <br>{<br>”name” : “이름”,<br>”password” : “비밀번호”,<br>”contents” :  “일정 내용”<br>}<br>요청 pathvaluable<br>{date} in /date/{date}                | 등록 정보                                                                                                                                                                       | 201: CREATED |
-| 전체 일정 조회        | GET    | api/schedule                         | -                                                                                                                                                 | 다건 응답 정보<br>[{<br>”id” = “식별번호”<br>”name” : “이름”,<br>”contents” :  “일정 내용”,<br>”calendarDate” : “ 일정 날짜”,<br>”inputDateTime”: “등록 날짜”,<br>”updateDateTime” : “수정 날짜”<br>}]  | 200: OK      |
-| 날짜 선택 일정 조회     | GET    | api/schedule/date/{date}             | 요청 pathvaluable<br>{date} in /date/{date}                                                                                                         | 다건 응답 정보<br>[{<br>”id” = “식별번호”<br>”name” : “이름”,<br>”contents” :  “일정 내용”,<br>”calendarDate” : “ 일정 날짜”,<br>”inputDateTime”: “등록 날짜”,<br>”updateDateTime” : “수정 날짜”<br>}]  | 200: OK      |
-| 유저 선택 일정 조회     | GET    | api/schedule/user/{user}             | 요청 pathvaluable<br>{name} in /user/{name}                                                                                                         | 다건 응답 정보<br>[{<br>”id” = “식별번호”<br>”name” : “이름”,<br>”contents” :  “일정 내용”,<br>”calendarDate” : “ 일정 날짜”,<br>”inputDateTime”: “등록 날짜”,<br>”updateDateTime” : “수정 날짜”<br>}]  | 200: OK      |
-| 날짜 유저 선택 일정 조회  | GET    | api/schedule/date/{date}/user/{user} | 요청 pathvaluable<br>{date}, {name} in<br>/date/{date}/user/{user}                                                                                  | 다건 응답 정보 <br>[{<br>”id” = “식별번호”<br>”name” : “이름”,<br>”contents” :  “일정 내용”,<br>”calendarDate” : “ 일정 날짜”,<br>”inputDateTime”: “등록 날짜”,<br>”updateDateTime” : “수정 날짜”<br>}] | 200: OK      |
-| 날짜 유저 단건 일정 조회  | GET    | api/schedule/post/{id}               | 요청 pathvaluable<br>{id} in /post/{id}                                                                                                             | 단건 응답 정보<br>{<br>”id” = “식별번호”<br>”name” : “이름”,<br>”contents” :  “일정 내용”,<br>”calendarDate” : “ 일정 날짜”,<br>”inputDateTime”: “등록 날짜”,<br>”updateDateTime” : “수정 날짜”<br>}    | 200: OK      |
-|  일정 수정          | PATCH  | api/schedule/post/{id}               | 요청 body<br>{<br>”name” : “이름”,<br>”date” : “일정 날짜”<br>”password” : “비밀번호”,<br>”contents” :  “일정 내용”<br>}<br>요청 pathvaluable<br>{id} in /post/{id} | 수정 정보<br>{<br>”id” = “식별번호”<br>”name” : “이름”,<br>”contents” :  “일정 내용”,<br>”calendarDate” : “ 일정 날짜”,<br>”inputDateTime”: “등록 날짜”,<br>”updateDateTime” : “수정 날짜”<br>}       | 200: OK      |
-| 선택한 일정 삭제       | DELETE | api/schedule/post/{id}               | 요청 pathvaluable<br> {id} in /post/{id}                                                                                                            | -                                                                                                                                                                           | 200: OK      |
+| 기능             | Method   | URL                              | request                                                                                                                                                             | response                                                                                                                                                                                                                                           | 상태코드     |
+|:-----------------|:---------|:---------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-------------|
+| 회원가입         | POST     | api/members/signup               | 요청 body <br>{<br>"email": “이메일”,<br>"password": "비밀번호",<br>"passwordCheck": "비밀번호 확인",<br>"username": "이름"<br>}                                    | 단건 응답 정보<br>{<br>"id": “멤버식별번호”,<br>"email": "이메일",<br>"username": "이름",<br>"createdAt": "생성날짜",<br>"modifiedAt": "수정날짜"<br>}                                                                                             | 201: CREATED |
+| 멤버 조회        | GET      | api/members/{id}                 | 요청 pathvaluable<br>{id} in    /members/{id}                                                                                                                       | 단건 응답 정보<br>{<br>"id": “멤버식별번호”,<br>"email": "이메일",<br>"username": "이름",<br>"createdAt": "생성날짜",<br>"modifiedAt": "수정날짜"<br>}                                                                                             | 200: OK      |
+| 로그인           | POST     | api/members/login                | 요청 body <br>{<br>"email" : "이메일",<br>"password" : "비밀번호"<br>}                                                                                              | 응답 메세지<br>{<br>"message": "로그인에 성공하였습니다."<br>}                                                                                                                                                                                     | 200: OK      |
+| 로그아웃         | POST     | api/members/logout               | -                                                                                                                                                                   | 응답 메세지<br>{<br>"message": "로그아웃하였습니다."<br>}                                                                                                                                                                                          | 200: OK      |
+| 멤버 정보 수정   | PATCH    | api/members/{id}                 | 요청 pathvaluable<br>{id} in   /members/{id}                                                                                                                        | 응답 메세지<br>{<br>"message": "회원정보가 수정되었습니다."<br>}                                                                                                                                                                                   | 200: OK      |
+| 멤버 삭제        | DELETE   | api/members/{id}                 | 요청 pathvaluable<br>{id} in   /members/{id}                                                                                                                        | 응답 메세지<br>{<br>"message": "회원정보가 삭제되었습니다. 자동으로 로그아웃됩니다."<br>}                                                                                                                                                          | 200: OK      |
+| 일정 저장        | POST     | api/plans                        | 요청 body<br>{<br>”name” : “이름”,<br>”date” : “일정 날짜”<br>”password” : “비밀번호”,<br>”contents” :  “일정 내용”<br>}<br>요청 pathvaluable<br>{id} in /post/{id} | 단건 응답 정보<br>{<br>"id": “일정식별번호”,<br>"title": "일정 제목",<br>"targetDate": "일정 날짜",<br>"contents": 일정 내용",<br>"createdAt": "작성일",<br>"modifiedAt": "수정일",<br>"email": "작성자 이메일",<br>"username": "작성자 이름"<br>} | 201: CREATED |
+| 모든 일정 조회   | GET      | api/plans                        | -                                                                                                                                                                   | 다건 응답 정보<br>[{<br>"id": “일정식별번호”,<br>"title": "일정 제목",<br>"targetDate": "일정 날짜",<br>"createdAt": "작성일",<br>"username": "작성자 이름"<br>}]                                                                                  | 200: OK      |
+| 이름별 일정 조회 | GET      | api/plans/name/{name}            | 요청 pathvaluable<br>{name} in  /plans/name/{name}                                                                                                                  | 다건 응답 정보<br>[{<br>"id": “일정식별번호”,<br>"title": "일정 제목",<br>"targetDate": "일정 날짜",<br>"createdAt": "작성일",<br>"username": "작성자 이름"<br>}]                                                                                  | 200: OK      |
+| 날짜별 일정 조회 | GET      | api/plans/date/{date}            | 요청 pathvaluable<br>{date} in  /plans/date/{date}                                                                                                                  | 다건 응답 정보<br>[{<br>"id": “일정식별번호”,<br>"title": "일정 제목",<br>"targetDate": "일정 날짜",<br>"createdAt": "작성일",<br>"username": "작성자 이름"<br>}]                                                                                  | 200: OK      |
+| 일정 조회        | GET      | api/plans/{id}                   | 요청 pathvaluable<br>{id} in   /plans/{id}                                                                                                                          | 단건 응답 정보<br>{<br>"id": “일정식별번호”,<br>"title": "일정 제목",<br>"targetDate": "일정 날짜",<br>"contents": 일정 내용",<br>"createdAt": "작성일",<br>"modifiedAt": "수정일",<br>"email": "작성자 이메일",<br>"username": "작성자 이름"<br>} | 200: OK      |
+| 일정 수정        | PATCH    | api/plans/{id}                   | 요청 pathvaluable<br>{id} in   /plans/{id}                                                                                                                          | 단건 응답 정보<br>{<br>"id": “일정식별번호”,<br>"title": "일정 제목",<br>"targetDate": "일정 날짜",<br>"contents": 일정 내용",<br>"createdAt": "작성일",<br>"modifiedAt": "수정일",<br>"email": "작성자 이메일",<br>"username": "작성자 이름"<br>} | 200: OK      |
+| 일정 삭제        | DELETE   | api/plans/{id}                   | 요청 pathvaluable<br>{id} in   /plans/{id}                                                                                                                          | {<br>"message": "계획이 삭제되었습니다."<br>}                                                                                                                                                                                                      | 200: OK      |
+| 댓글 저장        | POST     | api/plans/{planId}/comments      | 요청 pathvaluable<br>{planId} in   /plans/{planId}/comments<br>요청 body<br>{    <br>"contents": "댓글 내용"<br>}                                                   | 단건 응답 정보<br>{<br>"id": “댓글 식별 번호”,<br>"contents": "댓글 내용",<br>"createdAt": “작성일",<br>"modifiedAt": "수정일",<br>"username": "작성자 이름",<br>"email": "작성자이메일"<br>}                                                      | 201:CREATED  |
+| 일정별 댓글 조회 | GET      | api/plans/{planId}/comments      | 요청 pathvaluable<br>{planId} in   /plans/{planId}/comments                                                                                                         | 다건 응답 정보<br>[{<br>"id": “댓글 식별 번호”,<br>"contents": "댓글 내용",<br>"createdAt": “작성일",<br>"modifiedAt": "수정일",<br>"username": "작성자 이름",<br>"email": "작성자이메일"<br>}]                                                    | 200: OK      |
+| 댓글 수정        | PUT      | api/plans/{planId}/comments/{id} | 요청 pathvaluable<br>{planId}, {id} in   <br>/plans/{planId}/comments/{id}<br>요청 body<br>{    <br>"contents": "댓글 내용"<br>}                                    | 응답 메세지<br>{<br>"message": "댓글이 수정되었습니다."<br>}                                                                                                                                                                                       | 200: OK      |
+| 댓글 삭제        | DELETE   | api/plans/{planId}/comments/{id} | 요청 pathvaluable<br>{planId}, {id} in   <br>/plans/{planId}/comments/{id}                                                                                          | 응답 메세지<br>{<br>"message": "댓글이 삭제되었습니다."<br>}                                                                                                                                                                                       | 200: OK      |                                                                                                                                                                         | 200: OK      |
 
   
-  [api 명세서 링크 바로가기](https://www.notion.so/1bd1384f860280cbbf41de3e9907f77d?v=1bd1384f860280a08e2a000c57ec49f3)
+  [api 명세서 링크 바로가기](https://www.notion.so/1ca1384f860280478341cbba3697830e?v=1ca1384f860281e98a51000c757f4f22)
 
 ---
 ### ERD
 
-![image](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbnVWFA%2FbtsMXOD0YGg%2FCg4UepCn8fRO08nH3vFJi0%2Fimg.png)
+![image](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FdJCa6D%2FbtsM8Z0am7O%2Fflpo6jCylQrlIEYkTGe4N0%2Fimg.png)
 
 
-* 도전과제를 진행하지 않았기 때문에 한개의 표로 표현
+
 
 
 ### 디렉토리
-📦main
-
- ┣ 📂java
- 
- ┃ ┗ 📂com
- 
- ┃ ┃ ┗ 📂example
- 
- ┃ ┃ ┃ ┗ 📂schedule
- 
- ┃ ┃ ┃ ┃ ┣ 📂controller
- 
- ┃ ┃ ┃ ┃ ┃ ┗ 📜ScheduleController.java
- 
- ┃ ┃ ┃ ┃ ┣ 📂dto
- 
- ┃ ┃ ┃ ┃ ┃ ┣ 📜ScheduleDeleteRequestDto.java
- 
- ┃ ┃ ┃ ┃ ┃ ┣ 📜SchedulePostRequestDto.java
- 
- ┃ ┃ ┃ ┃ ┃ ┣ 📜ScheduleRequestDto.java
- 
- ┃ ┃ ┃ ┃ ┃ ┗ 📜ScheduleResponseDto.java
- 
- ┃ ┃ ┃ ┃ ┣ 📂entity
- 
- ┃ ┃ ┃ ┃ ┃ ┗ 📜Schedule.java
- 
- ┃ ┃ ┃ ┃ ┣ 📂handler
- 
- ┃ ┃ ┃ ┃ ┃ ┗ 📜ScheduleExceptionHandler.java
- 
- ┃ ┃ ┃ ┃ ┣ 📂repository
- 
- ┃ ┃ ┃ ┃ ┃ ┣ 📜JdbdTemplateScheduleRepository.java
- 
- ┃ ┃ ┃ ┃ ┃ ┗ 📜ScheduleRepository.java
- 
- ┃ ┃ ┃ ┃ ┣ 📂service
- 
- ┃ ┃ ┃ ┃ ┃ ┣ 📜ScheduleService.java
- 
- ┃ ┃ ┃ ┃ ┃ ┗ 📜ScheduleServiceImpl.java
- 
- ┃ ┃ ┃ ┃ ┗ 📜ScheduleApplication.java
- 
- ┗ 📂resources
- 
- ┃ ┣ 📂static
- 
- ┃ ┣ 📂templates
- 
- ┃ ┗ 📜application.properties
- 
+<pre> 
+📦src
+ ┣ 📂main
+ ┃ ┣ 📂java
+ ┃ ┃ ┗ 📂com
+ ┃ ┃ ┃ ┗ 📂example
+ ┃ ┃ ┃ ┃ ┗ 📂scheduleproject
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂common
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜Const.java
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂config
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜MemberValidator.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜PasswordEncoder.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜WebConfig.java
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂controller
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜CommentController.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜MemberController.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜PlanController.java
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂dto
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂comment
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜CommentRequestDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜CommentResponseDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂member
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜DeleteMemberRequestDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜LoginRequestDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜LoginResponseDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜MemberResponseDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜SignUpRequestDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜UpdateMemberRequestDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂plan
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜PlanRequestDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜PlanResponseDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜SinglePlanResponseDto.java
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂entity
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜BaseEntity.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜Comment.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜Member.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜Plan.java
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂exception
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜LoginAuthException.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜MismatchException.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜MisMatchMemberException.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜NullResponseException.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜PasswordCheckFailException.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜SamePasswordException.java
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂filter
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜LoginFilter.java
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂handler
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜MyExceptionHandler.java
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂repository
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜CommentRepository.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜MemberRepository.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜PlanRepository.java
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂service
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜CommentService.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜CommentServiceImpl.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜MemberService.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜MemberServiceImpl.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜PlanService.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜PlanServiceImpl.java
+ ┃ ┃ ┃ ┃ ┃ ┗ 📜ScheduleProjectApplication.java
+ ┃ ┗ 📂resources
+ ┃ ┃ ┣ 📂static
+ ┃ ┃ ┣ 📂templates
+ ┃ ┃ ┗ 📜application.properties
+ ┗ 📂test
+ ┃ ┗ 📂java
+ ┃ ┃ ┗ 📂com
+ ┃ ┃ ┃ ┗ 📂example
+ ┃ ┃ ┃ ┃ ┗ 📂scheduleproject
+ ┃ ┃ ┃ ┃ ┃ ┗ 📜SchedulesProjectApplicationTests.java
+  </pre>
  ----
 
  ### 개발일지기록 
- [티스토리블로그](https://rudtjs2.tistory.com/category/%EA%B3%BC%EC%A0%9C3)
+ [티스토리블로그](https://rudtjs2.tistory.com/category/%EA%B3%BC%EC%A0%9C4)
 
 
 
